@@ -4,9 +4,11 @@ package Date::Formatter;
 use strict;
 use warnings;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 use Scalar::Util qw(blessed);
+
+use Time::Local ();
 
 ## overload operators
 use overload (
@@ -26,20 +28,22 @@ use constant MONTHS => [ qw(January February March April May June July August Se
 ### constructor
 
 sub new {
-	my ($_class) = @_;
+	my ($_class, %date) = @_;
 	my $class = ref($_class) || $_class;
 	my $date = {};
 	bless($date, $class);
-	$date->_init();
+	$date->_init(%date);
 	return $date;
 }
 
-# alias "now" for "new" as an 
-# alternate constructor semantic
-*now = \&new;
+
+sub now {
+    pop @_ if scalar(@_) > 1;
+    goto &new;
+}
 
 sub _init {
-	my ($self) = @_;
+	my ($self, %date) = @_;
 	$self->{hourType} = 12;
 	$self->{abbreviateMonths} = 0;
 	$self->{abbreviateDays} = 0;
@@ -49,7 +53,37 @@ sub _init {
 	$self->{am_or_pm} = undef;
 	$self->{gmt_offset_hours} = undef;
 	$self->{gmt_offset_minutes}	= undef;
-	$self->_setTime(time());
+    if (%date) {      
+        # we let Time::Local do the range checking
+        # on these values here,.. 
+        $date{seconds}      = 0 unless exists $date{seconds};
+        $date{minutes}      = 0 unless exists $date{minutes};
+        $date{hour}         = 0 unless exists $date{hour};
+        $date{year}         = 0 unless exists $date{year};
+        $date{day_of_month} = 1 unless exists $date{day_of_month};
+        # we accept normal month values
+        # instead of zero index months
+        if (exists $date{month}) {
+            ($date{month} =~ /^\d+$/ && $date{month} >= 1) 
+                || die "Insufficient Arguments : 'month' value must be numeric and at least 1";        
+            $date{month} -= 1; 
+        }
+        else {
+        	$date{month} = 0; 
+        }        
+        my $new_time;
+        eval {
+            $new_time = Time::Local::timelocal(
+                            $date{seconds}, $date{minutes}, $date{hour},
+                            $date{day_of_month}, $date{month}, $date{year}
+                        );
+        };
+        die "Insufficient Arguments : Could not construct a proper date value : $@" if $@;
+        $self->_setTime($new_time);    
+    }
+    else {
+        $self->_setTime(time());
+    }
 }
 
 ## alternate constructor 
@@ -504,11 +538,15 @@ This module provides a fast and very flexible mini-language to be used in format
 
 =over 4
 
-=item B<new>
+=item B<new (%date)>
+
+The C<new> constructor will return an new instance representing the current time. It also accepts an optional C<%date> descriptor. The C<%date> can contain the following fields: I<hour, minutes, seconds, day_of_month, month, and year>. The values in C<%date> are then used to construct a new object with that date. 
+
+B<NOTE:> You can leave out values in C<%date>, most of the time they will default to 0. For detailed information on how the C<%date> values are handled I suggest consulting the L<Time::Local> documentation. It should be noted though that we handle I<month> values as 1 .. 12 and not the 0 .. 11 that L<Time::Local> does.
 
 =item B<now> 
 
-C<new> or C<now> will create a B<Date::Formatter> object with the current time.
+The C<now> constructor will create a B<Date::Formatter> object with the current time.
 
 =item B<createTimeInterval (%date_info)>
 
@@ -746,17 +784,19 @@ None that I am aware of. The code is pretty thoroughly tested (see L<CODE COVERA
 
 I use B<Devel::Cover> to test the code coverage of my tests, below is the B<Devel::Cover> report on this module's test suite.
 
- ------------------------------------ ------ ------ ------ ------ ------ ------ ------
- File                                   stmt branch   cond    sub    pod   time  total
- ------------------------------------ ------ ------ ------ ------ ------ ------ ------
- /Date/Formatter.pm                    100.0   96.2   70.5  100.0  100.0  100.0   95.9
- ------------------------------------ ------ ------ ------ ------ ------ ------ ------
- Total                                 100.0   96.2   70.5  100.0  100.0  100.0   95.9
- ------------------------------------ ------ ------ ------ ------ ------ ------ ------
+ ------------------------ ------ ------ ------ ------ ------ ------ ------
+ File                       stmt branch   cond    sub    pod   time  total
+ ------------------------ ------ ------ ------ ------ ------ ------ ------
+ Date/Formatter.pm         100.0   95.8   74.5  100.0  100.0  100.0   96.4
+ ------------------------ ------ ------ ------ ------ ------ ------ ------
+ Total                     100.0   95.8   74.5  100.0  100.0  100.0   96.4
+ ------------------------ ------ ------ ------ ------ ------ ------ ------
 
 =head1 SEE ALSO
 
 The accessor interface to this module was inspired by and at times directly ripped off from the Javascript and Java Date objects.
+
+This module uses L<Time::Local> when creating dates with the C<%date> parameter to C<new()>.
 
 For serious date/time involved work, skip my module and go straight to the
 DateTime project at L<http://datetime.perl.org>. Don't even waste your time 
@@ -769,25 +809,25 @@ Below is a list of other Date/Time modules I have looked over in the past, and m
 
 =over 5
 
-=item B<Class::Date>
+=item L<Class::Date>
 
 This module seems pretty nice, I have never used it. It is much more ambitious than my module, but in my opinion provides inferior formatting capabilties.
 
-=item B<Date::Simple>
+=item L<Date::Simple>
 
 If you have to manipulate just dates (it doesnt handle time), then this is a pretty good module. It provides an XS as well as a Pure Perl version. 	
 
-=item B<Time::Format>
+=item L<Time::Format>
 
 This module is available as both an XS or a Pure perl version. It provides a funky global hash which can be used to easily format a UNIX time value. It does seem quite extensive, and is a nice way of going about this. But it is not OO at all, which is much of where it differs from my module.
 
-=item B<Date::Format>
+=item L<Date::Format>
 
 A pretty nice formatting module, but purely functional in style. Not that thatis bad, just that its not the same as our OO version.	
 
-=item B<Time::Object>
+=item L<Time::Object>
 
-=item B<Time::localtime>
+=item L<Time::localtime>
 
 Are both wrappers/helpers/extensions around the C<localtime> and C<gmttime> functions.
 

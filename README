@@ -1,4 +1,4 @@
-Date::Formatter version 0.05
+Date::Formatter version 0.06
 ===========================
 
 INSTALLATION
@@ -14,7 +14,8 @@ DEPENDENCIES
 
 This module requires these other modules and libraries:
 
-	None
+	Scalar::Util
+    Time::Local
 
 COPYRIGHT AND LICENCE
 

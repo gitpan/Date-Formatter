@@ -1,5 +1,11 @@
 Revision history for Perl extension Date-Formatter.
 
+0.06 
+    - added the options to set a date from the 
+      constructor which uses Time::Local::timelocal() 
+      to construct the new date
+    - added Time::Local as a dependency
+
 0.05 Thurs Nov 18 2004
     - now using Scalar::Util::blessed() instead of 
       the convoluted UNIVERSAL::isa() stuff. 
