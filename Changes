@@ -1,5 +1,9 @@
 Revision history for Perl extension Date-Formatter.
 
+0.02  Tues April 13, 2004
+    - the documentation was a little wonky, so I cleaned it up
+	  nothing much else was changed though.
+
 0.01  Mon Apr 12 23:59:09 2004
 	- original version; created by h2xs 1.22 with options
 		-X -n Date-Formatter

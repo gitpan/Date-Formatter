@@ -29,7 +29,7 @@ like(Date::Formatter->now()->createDateFormatter("(MM)/(DD)/(YYYY) (hh):(mm):(ss
 	'... formatter matches output');
 
 like(Date::Formatter->now()->createDateFormatter("(MM).(DD).(YYYY) (hh):(mm):(ss) (T) (O)"), 
-	qr/^\d{1,2}\.\d{1,2}\.\d\d\d\d \d{1,2}:\d\d:\d\d (a|p)\.m\. \-\d\d\d\d$/,
+	qr/^\d{1,2}\.\d{1,2}\.\d\d\d\d \d{1,2}:\d\d:\d\d (a|p)\.m\. \-?\d\d\d\d$/,
 	'... formatter matches output');
 
 like(Date::Formatter->now()->createDateFormatter("(D) (M)  (DD) (hh):(mm):(ss) (YYYY)"), 

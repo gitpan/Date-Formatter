@@ -4,7 +4,7 @@ package Date::Formatter;
 use strict;
 use warnings;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 ## overload operators
 use overload (
@@ -459,7 +459,7 @@ __END__
 
 =head1 NAME
 
-Date-Formatter - A simple Date and Time formatting object 
+Date::Formatter - A simple Date and Time formatting object 
 
 =head1 SYNOPSIS
 
@@ -501,7 +501,9 @@ This module provides a fast and very flexible mini-language to be used in format
 
 =over 4
 
-=item B<new>, B<now> 
+=item B<new>
+
+=item B<now> 
 
 C<new> or C<now> will create a B<Date::Formatter> object with the current time.
 
@@ -520,10 +522,6 @@ Accepts the following named arguments:
  minutes
  seconds
 
-B<NOTE:> 
-
-This can also be used to set a time sometime past the epoch, but that is not terribly useful. Except maybe to pass in nothing and get the date of the epoch on your current system.
-
 =item B<refresh>
 
 Occasionally you will want to refresh the time to be the current time. This would allow a B<Date::Formatter> object to be used over a long period of time.
@@ -532,13 +530,9 @@ Occasionally you will want to refresh the time to be the current time. This woul
 
 =head2 Formatted Output Methods
 
+The formatted output methods are means of customizing the string output of the B<Date::Formatter> object. The C<createDateFormatter> is at the heart of this group, it implements a mini-language for formatting dates. The internal parser in C<createDateFormatter> has been optimized to make this a very usable operation, as it will be one of the most common uses of this object.
+
 =over 4
-
-The formatted output methods are means of customizing the string output of the B<Date::Formatter> object. The C<createDateFormatter> is at the heart of this group, it implements a mini-language for formatting dates. 
-
-B<NOTE:> 
-
-That the internal parser in C<createDateFormatter> has been optimized to make this a very usable operation, as it will be one of the most common uses of this object.
 
 =item B<createDateFormatter ($format_string)>
 
@@ -596,9 +590,11 @@ here is a format that will exactly mimic the default date format
 
 =item B<getDateFormatter>
 
-returns the formatter subroutine, so you can share between multiple B<Date::Formatter> objects if you like.
+Returns the formatter subroutine, so you can share between multiple B<Date::Formatter> objects if you like.
 
 =item B<setDateFormatter ($func)>
+
+Sets the formatter routine, this is how one would share that formatter routine mentioned above.
 
 =back
 
@@ -688,7 +684,7 @@ These methods overload the + and - operators respectively.
 
 =item B<toString>
 
-A C<toString> method is implemented, and used to overload the '""' stringification operator.
+This method returns the formatted string as specified by the C<createDateFormatter> method. This is used to overload the '""' stringification operator.
 
 =item B<compare>
 
@@ -738,6 +734,8 @@ The Date::Formatter class is epoch limited. Below is a note about this from perl
 Possibly incorporate a timer class with this as well, with C<start> and C<stop> methods.
 
 Using date formatters on time intervals does not always make sense, as it will just give you a representation of the interval past after the epoch. Possibly consider an alternate format for intervals. This would likely require some reworking of the way intervals are handled so it is only an idea for now.
+
+This documentation needs some work.
 
 =head1 BUGS
 
