@@ -1,5 +1,10 @@
 Revision history for Perl extension Date-Formatter.
 
+0.04  Sun May 2 2004
+    - Tests for time based modules are touchy. Another test was
+      failing because I again made an assumption that did not
+      pan out. Hopefully this will fix it now. 
+
 0.03  Tues April 14, 2004
     - The first test was failing, it was not due to an error
 	  in the module, but instead an error in the tests. I was

@@ -4,7 +4,7 @@ package Date::Formatter;
 use strict;
 use warnings;
 
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 ## overload operators
 use overload (
@@ -169,7 +169,8 @@ sub getDateFormatter {
 
 sub setDateFormatter {
 	my ($self, $formatter) = @_;
-	(defined($formatter) && ref($formatter) eq "CODE") || die "Insufficient Arguments : bad formatter";
+	(defined($formatter) && ref($formatter) eq "CODE") 
+        || die "Insufficient Arguments : bad formatter";
 	$self->{formatter} = $formatter;
 }
 
@@ -730,8 +731,6 @@ The Date::Formatter class is epoch limited. Below is a note about this from perl
  right now is sometime in the year 2038, and the earliest is around 1902."
 
 =head1 TO DO 
-
-Possibly incorporate a timer class with this as well, with C<start> and C<stop> methods.
 
 Using date formatters on time intervals does not always make sense, as it will just give you a representation of the interval past after the epoch. Possibly consider an alternate format for intervals. This would likely require some reworking of the way intervals are handled so it is only an idea for now.
 

@@ -23,7 +23,13 @@ isa_ok($interval, 'Date::Formatter');
 # pack the interval to find out how many seconds it is
 can_ok($interval, 'pack');
 cmp_ok($interval->pack(), '==', 600, '... this is how many seconds the interval is');
-is($interval->isAMorPM(), "p.m.", '... it should be p.m.');
+
+$interval->use24HourClock();
+my $hour_24 = $interval->getHours();
+$interval->use12HourClock();
+is( $interval->isAMorPM(), 
+    (($hour_24 > 12) ? "p.m." : "a.m."), 
+    '... it should be p.m.');
 
 # add the date to the interval
 my $later_date = $date + $interval;
