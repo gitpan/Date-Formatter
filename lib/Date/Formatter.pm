@@ -4,7 +4,7 @@ package Date::Formatter;
 use strict;
 use warnings;
 
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 use Scalar::Util qw(blessed);
 
@@ -485,10 +485,6 @@ sub notEqual {
 	return ($left->equal($right)) ? 0 : 1;
 }
 
-
-1;
-
-__DATA__
 
 1;
 
