@@ -1,5 +1,13 @@
 Revision history for Perl extension Date-Formatter.
 
+0.03  Tues April 14, 2004
+    - The first test was failing, it was not due to an error
+	  in the module, but instead an error in the tests. I was
+	  calculating the number of hours till a certain time, so
+	  I would maniplate certain blocks of code and test them. 
+	  My test calculations were flawed, so it was not correctly 
+	  setting the hours for the test.
+
 0.02  Tues April 13, 2004
     - the documentation was a little wonky, so I cleaned it up
 	  nothing much else was changed though.

@@ -46,7 +46,17 @@ cmp_ok((($refreshed_date->getSeconds() + 1) % 60),
 my $hour = $date->getHours();
 my $is_am = ($date->isAMorPM() eq 'a.m.') ? 1 : 0;
 $date->use24HourClock();
-cmp_ok((($is_am || $hour == 12) ? $hour : $hour + 12), '==', $date->getHours(), '... our 24 hour clock is good');
+
+cmp_ok(($hour == 12 && !$is_am) ?
+			12
+			:
+			($hour == 12 && $is_am) ?
+				0
+				:
+				($is_am) ?
+					$hour
+					:
+					($hour + 12), '==', $date->getHours(), '... our 24 hour clock is good');
 # this should now return nothing
 ok(!defined($date->isAMorPM()), '... this is undefined');
 
@@ -76,48 +86,72 @@ isnt($date->stringValue(), $date->clone()->stringValue(), '... these object aren
 # get a pristine date object to test hours with
 
 my $date2 = Date::Formatter->new();
-$date2->use24HourClock();
 
+my $is_am2 = ($date2->isAMorPM() eq 'a.m.') ? 1 : 0;
+$date2->use24HourClock();
 my $hours = $date2->getHours();
 $date2->use12HourClock();
 
-cmp_ok($date2->add(Date::Formatter->createTimeInterval(hours => 
-											(($hours == 12) ?
-												12
-												:	
-												12 - $hours)))->getHours(),
-		'==', 12, '... this should push it to 12');
-is($date2->add(Date::Formatter->createTimeInterval(hours => 
-											(($hours == 12) ?
-												12
-												:	
-												12 - $hours)))->isAMorPM(),
-		'p.m.', '... this should be p.m.');
-		
 cmp_ok($date2->subtract(Date::Formatter->createTimeInterval(hours => $hours))->getHours(),
 		'==', 12, '... this should push it to 12');	
 is($date2->subtract(Date::Formatter->createTimeInterval(hours => $hours))->isAMorPM(),
 		'a.m.', '... this should be a.m.');	
-		
-cmp_ok($date2->subtract(Date::Formatter->createTimeInterval(hours => abs((($hours == 12) ?
-												12
-												:	
-												12 - $hours) - 1)))->getHours(),
-		'==', 11, '... this should push it to 11');	
-is($date2->subtract(Date::Formatter->createTimeInterval(hours => abs((($hours == 12) ?
-												12
-												:	
-												12 - $hours) - 1)))->isAMorPM(),
-		'a.m.', '... this should be a.m.');							
+
+my $hours_to_12 = (($hours == 12) ?
+							0
+							:
+							($hours == 0) ?
+								12
+								:
+								($hours < 12) ?
+									(12 - $hours)
+									:
+									(12 - $hours));
+
+#diag "till 12: $hours, $hours_to_12";
+
+cmp_ok($date2->add(Date::Formatter->createTimeInterval(hours => $hours_to_12))->getHours(),
+		'==', 12, '... this should push it to 12');
+is($date2->add(Date::Formatter->createTimeInterval(hours => $hours_to_12))->isAMorPM(),
+		'p.m.', '... this should be p.m.');
 	
-cmp_ok($date2->add(Date::Formatter->createTimeInterval(hours => ((($hours == 12) ?
-												12
-												:	
-												12 - $hours) + 1)))->getHours(),
+my $hours_to_11 = (($hours == 11) ?
+						0
+						:
+						($hours == 0) ?
+							11
+							:
+							($hours < 11) ?
+								(11 - $hours)
+								:
+								(11 - $hours));		
+								
+#diag "till 11: $hours, $hours_to_11";
+			
+cmp_ok($date2->add(Date::Formatter->createTimeInterval(hours => 
+		$hours_to_11))->getHours(),
+		'==', 11, '... this should push it to 11');	
+is($date2->add(Date::Formatter->createTimeInterval(hours => 
+		$hours_to_11))->isAMorPM(),
+		'a.m.', '... this should be a.m.');	
+		
+my $hours_to_1 = (($hours == 13) ?
+						0
+						:
+						($hours == 0) ?
+							13
+							:
+							($hours < 13) ?
+								(13 - $hours)
+								:
+								(13 - $hours));															
+
+#diag "till 1: $hours, $hours_to_1";
+	
+cmp_ok($date2->add(Date::Formatter->createTimeInterval(hours =>
+		$hours_to_1))->getHours(),
 		'==', 1, '... this should push it to 1');	
-is($date2->add(Date::Formatter->createTimeInterval(hours => ((($hours == 12) ?
-												12
-												:	
-												12 - $hours) + 1)))->isAMorPM(),
+is($date2->add(Date::Formatter->createTimeInterval(hours =>
+		$hours_to_1))->isAMorPM(),
 		'p.m.', '... this should be p.m.');		
 

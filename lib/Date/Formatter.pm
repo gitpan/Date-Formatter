@@ -4,7 +4,7 @@ package Date::Formatter;
 use strict;
 use warnings;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 ## overload operators
 use overload (
@@ -748,14 +748,14 @@ I use B<Devel::Cover> to test the code coverage of my tests, below is the B<Deve
  ---------------------------------------- ------ ------ ------ ------ ------ ------ ------
  File                                       stmt branch   cond    sub    pod   time  total
  ---------------------------------------- ------ ------ ------ ------ ------ ------ ------
- /Date/Formatter.pm                        100.0   96.2   62.2  100.0  100.0  100.0   94.5
- t/10_Date_Formatter_test.t                100.0   50.0   33.3    n/a    n/a   85.3   92.0
- t/20_Date_Formatter_overloads_test.t      100.0    n/a    n/a  100.0    n/a    3.7  100.0
- t/30_Date_Formatter_formatter_test.t      100.0    n/a    n/a  100.0    n/a   19.7  100.0
+ /Date/Formatter.pm                        100.0   96.2   68.9  100.0  100.0    4.5   95.6
+ t/10_Date_Formatter_test.t                100.0   50.0   33.3  100.0    n/a   82.3   81.1
+ t/20_Date_Formatter_overloads_test.t      100.0    n/a    n/a  100.0    n/a    8.9  100.0
+ t/30_Date_Formatter_formatter_test.t      100.0    n/a    n/a  100.0    n/a    2.6  100.0
  t/40_Date_Formatter_serialization_test.t  100.0    n/a    n/a    n/a    n/a    0.6  100.0
  t/50_Date_Formatter_interval_test.t       100.0    n/a    n/a    n/a    n/a    1.1  100.0
  ---------------------------------------- ------ ------ ------ ------ ------ ------ ------
- Total                                     100.0   92.9   60.4  100.0  100.0  100.0   95.5
+ Total                                     100.0   80.0   64.7  100.0  100.0  100.0   94.7
  ---------------------------------------- ------ ------ ------ ------ ------ ------ ------
 
 =head1 SEE ALSO
