@@ -6,6 +6,7 @@ WriteMakefile(
     'VERSION_FROM'	=> 'lib/Date/Formatter.pm', # finds $VERSION
     'PREREQ_PM'		=> {
 		'Test::More' => 0.47,
-		'Test::Exception' => 0.15
+		'Test::Exception' => 0.15,
+        'Scalar::Util' => 1.10
 		}, # e.g., Module::Name => 1.1
 );

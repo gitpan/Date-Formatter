@@ -4,7 +4,9 @@ package Date::Formatter;
 use strict;
 use warnings;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
+
+use Scalar::Util qw(blessed);
 
 ## overload operators
 use overload (
@@ -407,7 +409,7 @@ sub stringValue {
 
 sub add {
 	my ($left, $right) = @_;
-	(UNIVERSAL::isa($left, "Date::Formatter") && UNIVERSAL::isa($right, "Date::Formatter")) 
+	(blessed($right) && $right->isa("Date::Formatter")) 
 		|| die "Illegal Operation : Cannot add a date object to a non-date object.";
 	return _setTime($left->clone(), $left->{internal} + $right->{internal});
 }
@@ -420,7 +422,7 @@ sub add {
 
 sub subtract {
 	my ($left, $right) = @_;
-	(UNIVERSAL::isa($left, "Date::Formatter") && UNIVERSAL::isa($right, "Date::Formatter"))  
+	(blessed($right) && $right->isa("Date::Formatter"))   
 		|| die "Illegal Operation : Cannot subtract a date object from a non-date object.";
 	return _setTime($left->clone(), $left->{internal} - $right->{internal});
 }
@@ -434,7 +436,7 @@ sub subtract {
 # compare two dates
 sub compare {
 	my ($left, $right) = @_;
-	(UNIVERSAL::isa($left, "Date::Formatter") && UNIVERSAL::isa($right, "Date::Formatter")) 
+	(blessed($right) && $right->isa("Date::Formatter"))  
 		|| die "Illegal Operation : Cannot compare a date object to a non-date object.";
 	return ($left->{internal} <=> $right->{internal});
 }
@@ -744,18 +746,13 @@ None that I am aware of. The code is pretty thoroughly tested (see L<CODE COVERA
 
 I use B<Devel::Cover> to test the code coverage of my tests, below is the B<Devel::Cover> report on this module's test suite.
 
- ---------------------------------------- ------ ------ ------ ------ ------ ------ ------
- File                                       stmt branch   cond    sub    pod   time  total
- ---------------------------------------- ------ ------ ------ ------ ------ ------ ------
- /Date/Formatter.pm                        100.0   96.2   68.9  100.0  100.0    4.5   95.6
- t/10_Date_Formatter_test.t                100.0   50.0   33.3  100.0    n/a   82.3   81.1
- t/20_Date_Formatter_overloads_test.t      100.0    n/a    n/a  100.0    n/a    8.9  100.0
- t/30_Date_Formatter_formatter_test.t      100.0    n/a    n/a  100.0    n/a    2.6  100.0
- t/40_Date_Formatter_serialization_test.t  100.0    n/a    n/a    n/a    n/a    0.6  100.0
- t/50_Date_Formatter_interval_test.t       100.0    n/a    n/a    n/a    n/a    1.1  100.0
- ---------------------------------------- ------ ------ ------ ------ ------ ------ ------
- Total                                     100.0   80.0   64.7  100.0  100.0  100.0   94.7
- ---------------------------------------- ------ ------ ------ ------ ------ ------ ------
+ ------------------------------------ ------ ------ ------ ------ ------ ------ ------
+ File                                   stmt branch   cond    sub    pod   time  total
+ ------------------------------------ ------ ------ ------ ------ ------ ------ ------
+ /Date/Formatter.pm                    100.0   96.2   70.5  100.0  100.0  100.0   95.9
+ ------------------------------------ ------ ------ ------ ------ ------ ------ ------
+ Total                                 100.0   96.2   70.5  100.0  100.0  100.0   95.9
+ ------------------------------------ ------ ------ ------ ------ ------ ------ ------
 
 =head1 SEE ALSO
 

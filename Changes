@@ -1,5 +1,11 @@
 Revision history for Perl extension Date-Formatter.
 
+0.05 Thurs Nov 18 2004
+    - now using Scalar::Util::blessed() instead of 
+      the convoluted UNIVERSAL::isa() stuff. 
+      - added Scalar::Util as a dependency
+    - added pod.t and pod_coverage.t
+
 0.04  Sun May 2 2004
     - Tests for time based modules are touchy. Another test was
       failing because I again made an assumption that did not
