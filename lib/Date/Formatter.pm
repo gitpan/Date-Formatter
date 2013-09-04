@@ -1,5 +1,8 @@
 
 package Date::Formatter;
+{
+  $Date::Formatter::VERSION = '0.10.1';
+}
 
 use strict;
 use warnings;

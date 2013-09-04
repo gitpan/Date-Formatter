@@ -18,4 +18,4 @@ requires:
   Test::Exception: 0.15
   Test::More: 0.47
   Time::Local: 1.06
-version: 0.10
+version: 0.10.1
