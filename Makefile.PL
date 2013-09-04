@@ -15,10 +15,10 @@ my %WriteMakefileArgs = (
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30"
   },
-  "DISTNAME" => "date-formatter",
+  "DISTNAME" => "Date-Formatter",
   "EXE_FILES" => [],
   "LICENSE" => "perl",
-  "NAME" => "date::formatter",
+  "NAME" => "Date::Formatter",
   "PREREQ_PM" => {
     "DateTime::Locale" => "0.01",
     "Scalar::Util" => "1.10",
