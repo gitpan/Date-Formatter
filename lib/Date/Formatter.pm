@@ -1,7 +1,7 @@
 
 package Date::Formatter;
 {
-  $Date::Formatter::VERSION = '0.10.1';
+  $Date::Formatter::VERSION = '0.11';
 }
 
 use strict;
